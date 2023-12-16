@@ -1,22 +1,21 @@
-name: Build and Deploy
-on:
-  push:
-    branches:
-      - init
+name: CI
+
+on: [push]
+
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v3
-    - name: All things angular
-      uses: AhsanAyaz/angular-deploy-gh-pages-actions@latest ## replace by latest version without it you will see Expected format {org}/{repo}[/path]@ref. Actual 'AhsanAyaz/angular-deploy-gh-pages-actions',Input string was not in a correct format.
-      with:
-        github_access_token: ${{ secrets.GITHUB_TOKEN }} # see the Configuration section for how you can create secrets
-        build_configuration: production # The build environment for the app. please look configurations in your angular.json
-        base_href: /main-app/   # make sure this corresponds to https://<your_username>.github.io/<base_href>/
-        deploy_branch: gh-pages # The branch the action should deploy to.
-        angular_dist_build_folder: dist/main-app # The folder where your project is supposed to be after running ng build by the action.
-
-permissions:
-  contents: write # Allow write permission to GITHUB_TOKEN to commit to deploy branch.
+      - uses: actions/checkout@v1
+      - name: Use Node.js 20.10.0
+        uses: actions/setup-node@v1
+        with:
+          node-version: 20.10.0
+      - name: Build and Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v2
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BASE_BRANCH: init
+          BRANCH: gh-pages
+          FOLDER: dist/main-app
+          BUILD_SCRIPT: npm install && npm run build -- --prod
