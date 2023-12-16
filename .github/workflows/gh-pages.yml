@@ -14,6 +14,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 20.10.0
+      - run: cd main-app
       - run: npm install
       - run: npm run build --prod
       - name: Build and Deploy
