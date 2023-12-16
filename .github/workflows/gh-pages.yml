@@ -14,9 +14,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 20.10.0
-      - run: cd main-app
-      - run: npm install
-      - run: npm run build --prod
+      - run: cd main-app && npm install
+      - run: cd main-app && npm run build --prod
       - name: Build and Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v2
         with:
