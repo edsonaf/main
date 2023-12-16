@@ -1,21 +1,24 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - init
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Use Node.js 20.10.0
         uses: actions/setup-node@v1
         with:
           node-version: 20.10.0
+      - run: npm install
+      - run: npm run build --prod
       - name: Build and Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v2
-        env:
+        with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          BASE_BRANCH: init
           BRANCH: gh-pages
           FOLDER: dist/main-app
-          BUILD_SCRIPT: npm install && npm run build -- --prod
